@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ytpepega</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="styles/core.css">
+    <link rel="stylesheet" href="styles/dark.css">
+</head>
+<body>
+    <div class="general-container">
+        <div class="top gridmargin">
+            <div class="url-side">
+                <input type="text" id="url" class="inputarea" spellcheck= "false" placeholder="video url here...">                           
+            </div>
+            <div class="buttons-side">
+                <button class="button2" id="insertLink">insert link</button>
+                <button class="button" id="downloadList">download list</button>
+            </div>
+        </div>
+        <div class="center gridmargin">
+            <div class="order">
+                <ul>
+                    <li class="brighter">1</li>
+                    <li>2</li>
+                    <li class="brighter">3</li>
+                    <li>4</li>
+                </ul>
+            </div>
+            <div class="description">
+                <ul>
+                    <li class="brighter">All Matter</li>
+                    <li>Think Of One </li>
+                    <li class="brighter"> Windows96 - How To See Through Walls </li>
+                    <li> S.B.G Intelligent DnB Mix [5] </li>
+                </ul>  
+            </div>
+        </div>
+        <div class="bottom gridmargin">
+            <div class="folderpath">
+                <div>
+                    <h3 class="text">download folder</h3>
+                    <input type="text" id="folderPath" class="folderPath textArea inputarea" placeholder="~/Downloads"> 
+                </div>     
+            </div>
+            <div class="ffmpeg">
+                <div>
+                    <h3 class="text">custom args</h3>
+                    <input type="text" id="ffmpegArgs" class="ffmpegArgs textArea inputarea" placeholder="lib64 -x aav"> 
+                </div>
+            </div>
+            <div class="filetype-select">
+                <div>
+                    <h3 class="text">filetype</h3>
+                    <select id="filetype">
+                        <option value="mp4">mp4</option>
+                        <option value="mp3">mp3</option>
+                        <option value="ogg">ogg</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

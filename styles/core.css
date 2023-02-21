@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+.general-container {
+    background-color: #121417;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    display: grid;
+    grid-template-areas: "top"
+                         "center"
+                         "bottom";
+    grid-template-columns: 1fr;
+    grid-template-rows: 12% 77% 10%; 
+    color: #848688;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.top {
+    margin: 0 0 0 0;
+    grid-area: "top";
+    display: grid;
+    grid-template-areas: "url" "buttons";
+    grid-template-columns: 78% 20%;
+    grid-template-rows: 100%;
+    background-color: #0f0f0f;
+    padding: 5px;
+    
+   
+}
+.top> * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+    
+}
+.url-side {
+    grid-area: "url";
+    
+}
+.inputarea {
+    width: 90%;
+    background-color: #323337;
+    background: linear-gradient(to bottom, #323234);
+    border: 1px solid #28282a;
+    color: #616368;
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    
+
+}
+#url {
+    height: 30px;
+}
+.buttons-side {
+    grid-area: "buttons";
+    flex-direction: column;
+    margin: 0;
+    padding: 10px;
+
+}
+.button {
+    width: 80%;
+    padding: 5px;
+    margin: 5px;
+
+  background-color: #0a82fc; /* fallback color */
+  background-image: linear-gradient(to bottom, #0e5aa7);
+  color: #b4e7f8;
+  border: 1px solid #021c3d;
+  border-radius: 5px;
+  
+}
+.button2 {
+    width: 80%;
+    padding: 5px;
+    margin: 5px;
+
+  background-color: #303236; /* fallback color */
+  background-image: linear-gradient(to bottom, #2a2c30);
+  color: #909296;
+  border: 1px solid #0d0f11;
+  border-radius: 5px;
+}
+
+.button2, .button {
+      transition: box-shadow 0.3s ease;
+}
+.button2:hover, .button:hover  {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);}
+.center {
+    grid-area: "center";
+    display: grid;
+    grid-template-areas: "order" "description";                     
+    grid-template-columns: 5% 95%;
+    grid-template-rows: 100%;
+    background-color: #151718;
+    overflow-y: auto;
+}
+.center > * {
+    margin: 0;
+    padding: 0;
+}
+.order {
+    grid-area: "order";
+    display: flex;
+    justify-content: center;
+}
+
+.order ul,
+.description ul {
+    /* styles for the unordered lists */
+    list-style: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.order ul li,
+.description ul li {
+    /* styles for the list items */
+    display: flex;
+    width: (100%-10px);
+    height: 32px;
+    
+    margin: 0;
+    align-items: center;
+    padding: 0 10px;
+    color: #acafb0;
+}
+.brighter {
+    background-color: #26292b;
+}
+
+.description {
+    grid-area: "description";
+    
+}
+.bottom {
+    
+    grid-area: "bottom";
+    display: grid;
+    grid-template-areas: "folderpath" "ffmpeg" "filetype";                     
+    grid-template-columns: 40% 40% 20%;
+    grid-template-rows: 100%;
+    background-color: #0f0f0f;
+    padding: 10px;
+    
+
+}
+.bottom > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    
+}
+.folderpath {
+    grid-area: "folderpath";
+}
+.ffmpeg {
+    grid-area: "ffmpeg";
+}
+.filetype {
+    grid-area: "filetype";
+}
+
+select {
+    background-color: #0e5aa7;
+    color: #b4e7f8;
+    border: none;
+    font-size: 16px;
+    height: 30px;
+    width: 80px;
+}
+  
+select option {
+    background-color: #0e5aa7;
+    color: white;
+    font-size: 16px;
+}
+
+
+
+
+.textArea {
+    width: 80%;
+}
+.text {
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+}
+
+/* 
+#121417
+#292943
+#505252
+#0137EA
+#9E594D
+#BDCBC6
+#6092D1
+
+*/
