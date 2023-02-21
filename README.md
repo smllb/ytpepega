@@ -2,9 +2,6 @@
 
 <p>Simple GUI to download video/music from youtube and convert them to different filetypes while also allowing custom conversion arguments through ffmpeg.</p>
 
-<br>
-<br>
-
 ## Installation 
 not yet xd 
 
