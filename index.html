@@ -14,26 +14,20 @@
                 <input type="text" id="url" class="inputarea" spellcheck= "false" placeholder="video url here...">                           
             </div>
             <div class="buttons-side">
-                <button class="button2" id="insertLink">insert link</button>
+                <button class="button2" id="insertLink" onclick="AddLinkToList()">insert link</button>
                 <button class="button" id="downloadList">download list</button>
             </div>
         </div>
         <div class="center gridmargin">
-            <div class="order">
-                <ul>
-                    <li class="brighter">1</li>
-                    <li>2</li>
-                    <li class="brighter">3</li>
-                    <li>4</li>
+            <div class="order" id="order">
+                <ul id="orderList">
+                    
                 </ul>
             </div>
-            <div class="description">
-                <ul>
-                    <li class="brighter">All Matter</li>
-                    <li>Think Of One </li>
-                    <li class="brighter"> Windows96 - How To See Through Walls </li>
-                    <li> S.B.G Intelligent DnB Mix [5] </li>
-                </ul>  
+            <div class="description" id="description">
+                <ul id="descriptionList">
+                    
+                </ul>
             </div>
         </div>
         <div class="bottom gridmargin">
@@ -61,6 +55,7 @@
             </div>
         </div>
     </div>
+    <script src="scripts/list.js"></script>
 </body>
 </html>
 
