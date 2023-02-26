@@ -14,7 +14,7 @@
                 <input type="text" id="url" class="inputarea" spellcheck= "false" placeholder="video url here...">                           
             </div>
             <div class="buttons-side">
-                <button class="button2" id="insertLink" onclick="AddLinkToList()">insert link</button>
+                <button class="button2" id="insertLink" onclick="PopulateList()">insert link</button>
                 <button class="button" id="downloadList">download list</button>
             </div>
         </div>
@@ -31,6 +31,10 @@
             </div>
         </div>
         <div class="bottom gridmargin">
+            <div class="logs">
+                <p id="logMinorEvents"></p>
+            </div>
+            
             <div class="folderpath">
                 <div>
                     <h3 class="text">download folder</h3>
@@ -55,7 +59,7 @@
             </div>
         </div>
     </div>
-    <script src="scripts/list.js"></script>
+    <script  src="scripts/list.js"></script> 
 </body>
 </html>
 

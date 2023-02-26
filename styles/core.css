@@ -10,7 +10,7 @@
                          "center"
                          "bottom";
     grid-template-columns: 1fr;
-    grid-template-rows: 12% 77% 10%; 
+    grid-template-rows: 12% 70% 17%; 
     color: #848688;
     font-family: 'Open Sans', sans-serif;
 }
@@ -137,35 +137,45 @@
     grid-area: "description";
     
 }
+
 .bottom {
-    
     grid-area: "bottom";
     display: grid;
-    grid-template-areas: "folderpath" "ffmpeg" "filetype";                     
+    grid-template-areas: 
+      "logs logs logs"
+      "folderpath ffmpeg filetype";
     grid-template-columns: 40% 40% 20%;
-    grid-template-rows: 100%;
+    grid-template-rows: 20% 80%;
     background-color: #0f0f0f;
-    padding: 10px;
-    
 
-}
-.bottom > * {
+  }
+  
+  .bottom > * {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+  
+  .logs {
+    grid-area: logs;
+    background-color: #323337;
+  }
+  
+  .folderpath {
+    grid-area: folderpath;
     
+  }
+  
+  .ffmpeg {
+    grid-area: ffmpeg;
     
-}
-.folderpath {
-    grid-area: "folderpath";
-}
-.ffmpeg {
-    grid-area: "ffmpeg";
-}
-.filetype {
-    grid-area: "filetype";
-}
+  }
+  
+  .filetype-select {
+    grid-area: filetype;
+    
+  }
 
 select {
     background-color: #0e5aa7;
