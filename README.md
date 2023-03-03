@@ -11,6 +11,7 @@
   * electron
   * nodejs
   * youtube api
+  * expressjs/websocket
   
 ## Installation 
 not yet xd 
