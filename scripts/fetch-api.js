@@ -32,6 +32,13 @@ socket.addEventListener('open', (event) => {
 
 socket.addEventListener('message', (event) => {
   console.log('Message received from server:', event.data);
+
+  if(event.data == 'downloaded') {
+
+    console.log('triggersomething')
+
+  }
+
 });
 
 socket.addEventListener('close', (event) => {
@@ -44,6 +51,10 @@ socket.addEventListener('error', (event) => {
 
 
 SendVideoListToServer = (videoObj) => {
+
+  selectedFiletype = document.getElementById('filetype').value;
+
+  videoObj.filetype = selectedFiletype;
 
   fetch('http://localhost:3000/send-list', {
     method: 'POST',

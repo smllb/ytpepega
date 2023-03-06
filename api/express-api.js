@@ -4,8 +4,8 @@ const cors = require('cors');
 const exp = express();
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
-
-const apiKey = JSON.parse(fs.readFileSync('./settings/settings.json')).apiKey.toString();
+const BulkDownload  = require('./api_scripts/bulk-download.js')
+const apiKey = JSON.parse(fs.readFileSync('./user_settings/settings.json')).apiKey.toString();
 const VideoListPath = './temp_data/video_list.json';
 
 exp.use(cors());
@@ -36,27 +36,7 @@ ResetVideoList = () => {
 
 }
 
-exp.post('/send-list', (req, res) => {
-  
-  const jsonList = JSON.stringify(req.body);
 
-  fs.writeFile(VideoListPath, jsonList, 'utf8', (err) => { 
-
-    if (err) {
-
-      console.log('error while writing.')
-      return console.log(err)
-
-    }
-
-    console.log(`Created video_list.json at ./temp_data.`)
-
-  })
-
-  console.log(`Retrieved video list from client: ${req.body}`)
-  res.send('video_list.json from received data');
-
-})
 
  UpdateHasListStatus = (value, context) => {
 
@@ -81,6 +61,29 @@ exp.post('/send-list', (req, res) => {
 const wss = new WebSocket.Server({ server: exp.listen(3000) });
 
 
+exp.post('/send-list', (req, res) => {
+  
+  const jsonList = JSON.stringify(req.body);
+
+  fs.writeFile(VideoListPath, jsonList, 'utf8', (err) => { 
+
+    if (err) {
+
+      console.log('error while writing.')
+      return console.log(err)
+
+    }
+
+    console.log(`Created video_list.json at ./temp_data.`)
+
+  })
+
+  console.log(`Retrieved video list from client.`)
+  BulkDownload(jsonList, wss);
+  res.send('video_list.json from received data');
+
+})
+
 wss.on('connection', (ws) => {
 
   console.log('WebSocket connection established at port 3000');
@@ -92,6 +95,11 @@ wss.on('connection', (ws) => {
     if (message == 'hasList') {
 
       UpdateHasListStatus(true, ws);
+    }
+    if (message == 'download') {
+
+      ws.send('downloaded')
+
     }
     
   });
@@ -106,4 +114,4 @@ wss.on('connection', (ws) => {
 });
 
 
-module.exports = exp;
+module.exports = { exp, VideoListPath };

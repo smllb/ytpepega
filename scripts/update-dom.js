@@ -75,7 +75,7 @@ AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList) => {
     //console.log(`videoList: ${videoList.items[actualIndex].id}`)
     itemsList.forEach((element, i) => {
 
-        let itemId = `${identificationList[i]}-${videoList.items[actualIndex].id}`;
+        let itemId = `${identificationList[i]}-${actualIndex}`;
         
         let descriptionContent =  `${videoList.items[actualIndex].title} ${videoList.items[actualIndex].id}`;
         let orderContent = actualIndex+1;
