@@ -59,10 +59,6 @@ AddLinkToList = (listObject, urlInfo) => {
         }
 
     });
-    videoList.items.forEach((item, i) => {
-
-        console.log(`id: ${item.id} | title: ${item.title}`)
-    });
     
 }
 
@@ -75,7 +71,7 @@ AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList) => {
     //console.log(`videoList: ${videoList.items[actualIndex].id}`)
     itemsList.forEach((element, i) => {
 
-        let itemId = `${identificationList[i]}-${actualIndex}`;
+        let itemId = `${identificationList[i]}-${videoList.items[actualIndex].id}`;
         
         let descriptionContent =  `${videoList.items[actualIndex].title} ${videoList.items[actualIndex].id}`;
         let orderContent = actualIndex+1;
@@ -84,6 +80,7 @@ AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList) => {
         element.textContent = identificationList[i] == "order" ? orderContent : descriptionContent;
         element.classList.add(itemClass)
         element.classList.add("listItem")
+        
     });
 
 }

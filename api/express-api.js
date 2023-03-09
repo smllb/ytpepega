@@ -60,31 +60,19 @@ ResetVideoList = () => {
   
 const wss = new WebSocket.Server({ server: exp.listen(3000) });
 
-
-exp.post('/send-list', (req, res) => {
-  
-  const jsonList = JSON.stringify(req.body);
-
-  fs.writeFile(VideoListPath, jsonList, 'utf8', (err) => { 
-
-    if (err) {
-
-      console.log('error while writing.')
-      return console.log(err)
-
-    }
-
-    console.log(`Created video_list.json at ./temp_data.`)
-
-  })
-
-  console.log(`Retrieved video list from client.`)
-  BulkDownload(jsonList, wss);
-  res.send('video_list.json from received data');
-
-})
-
 wss.on('connection', (ws) => {
+  console.table(ws)
+
+
+  wss.clients.forEach((client) => {
+    console.log(`trying to find clients`)
+    if (client.readyState === WebSocket.OPEN) {
+      console.log('found client' + client)
+    
+      
+    }
+    
+  })
 
   console.log('WebSocket connection established at port 3000');
   UpdateHasListStatus(false, ws);
@@ -113,5 +101,16 @@ wss.on('connection', (ws) => {
   });
 });
 
+
+exp.post('/send-list', (req, res) => {
+
+  console.log(`Retrieved video list from client.`)
+
+  const jsonList = JSON.stringify(req.body);
+  BulkDownload(jsonList, wss);
+  
+  res.send('video_list.json from received data');
+
+})
 
 module.exports = { exp, VideoListPath };

@@ -1,29 +1,43 @@
 const { spawn } = require('child_process');
-const VideoListPath = '/home/yogi/Documents/js/ytpepega/temp_data/video_list.json';
 const path = require('path');
 const fs = require('fs');
 const { Worker, isMainThread } = require('worker_threads');
 
 
 
-BulkDownload = (listJson, ws) => {
+const maxConversionsAtTheSameTime = 5;
 
-    //const jsonList = fs.readFileSync(VideoListPath, 'utf8');
-    //const list = JSON.parse(jsonList);
-    
-    list = JSON.parse(listJson);
+SendCurrentStatus = (message, ws) => {
+
+  ws.send(message)
+
+}
+
+DownloadFromList = (list, watcher, ws) => {
+
     console.log('Attempting download of list files ');
 
-    let folderPath = '/home/yogi/Documents/js/ytpepega/downloads';
+    let folderPath = path.join(__dirname, '/downloads')
     let filetype = list.filetype;
 
     list.items.forEach((item, i) => {
 
         isConverted = false;
-        let videoPath = `${folderPath}/${item.title}`;
-        let ytdlp = spawn('yt-dlp', ['-f', 'b', '-o', `${videoPath}.mp4`, `${item.id}`]);
-        let audioOutput = path.join('/home/yogi/Documents/js/ytpepega/downloads/', `${item.title}`);
+        let videoPath = path.join( folderPath, item.title);
+        let audioOutput = path.join( folderPath, `${item.title}`);
 
+        //spawn download
+        let ytdlp = spawn('yt-dlp', ['-f', 'b', '-o', `${videoPath}.mp4`, `${item.id}`]);
+        //send info to client updating status to 'downloading'
+        SendCurrentStatus(`downloading|${item.id}`, ws)
+
+        let videoData = {
+            videoPath: videoPath,
+            audioOutput: audioOutput,
+            filetype: filetype,
+            id: item.id
+        }
+        
         ytdlp.stdout.on('data', (data)=> {
 
             //console.log(`stdout: ${data}`);
@@ -37,59 +51,34 @@ BulkDownload = (listJson, ws) => {
         ytdlp.on('close', (code) => {
 
             console.log(`yt-dlp process exited with code ${code} | successful download of ${item.title} at ${videoPath}.mp4`);
-            item.converted = false;
+            
+            //send info to client updating status to 'downloaded'
+            SendCurrentStatus(`downloaded|${item.id}`, ws)
 
             if (code === 0) {
 
-                console.log(`Attempt to convert at ${videoPath}.mp4 with output to ${videoPath}.mp3 | converted status: ${item.converted}`);
-                let ffmpeg = spawn('ffmpeg', ['-y', '-i', `${videoPath}.mp4`, '-b:a', '192K', '-vn', `${audioOutput}.mp3`]);
+                // send info to queue to watcher
+                console.log(`Sending ${item.title} info to watcher `)
+                watcher.postMessage(videoData);
+                
 
-                ffmpeg.stdout.on('data', (data) => {
-
-                    //console.log(`stdout: ${data}`);
-                });
-
-                ffmpeg.stderr.on('data', (data) => {
-
-                    //console.error(`stderr: ${data}`);
-                });
-
-                ffmpeg.on('close', (code) => {
-
-                    item.converted = true;
-                    console.log(`ffmpeg process exited with code ${code}\n Deleting mp4 file at ${videoPath}.mp4 | item.converted status: ${item.converted}`);
-                    
-                    if (code != 0) {
-                        console.log(`code: ${code} | failure`);
-                        
-
-                    }
-                    
-                    fs.unlink(`${videoPath}.mp4`, (err) => {
-
-                        if (err) {
-
-                            console.log('error encountered while deleting file. ' + err);
-                        
-                        } else {
-
-                            console.log(`successfully deleted video at ${videoPath}.mp4`);
-                       
-                        }
-                    });
-
-                });
             } else {
 
-                console.log(`error found sry`);
-
+                console.log(`error found with that vid sry`);
+                SendCurrentStatus(`download_error|${item.id}`, ws)
             }
         });
     });
+
+}
+
+BulkDownload = async (listJson, wss) => {
+    console.log('bulkdownload is on, trynna do stuff')
+    //console.table(wss)
+    const watcher = new Worker(`${__dirname}/workers/watcher.js`, { workerData: { maxConcurrent: maxConversionsAtTheSameTime } })
+    list = JSON.parse(listJson);
+
 };
 
 module.exports = BulkDownload;
 
-// reference
-// Code 0 = success
-// Code 1 = video unavailable

@@ -35,10 +35,14 @@ socket.addEventListener('message', (event) => {
 
   if(event.data == 'downloaded') {
 
-    console.log('triggersomething')
+    // change color
+    
+  }
+  if(event.data == 'converted') {
+
+    // delete from list 
 
   }
-
 });
 
 socket.addEventListener('close', (event) => {

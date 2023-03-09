@@ -17,6 +17,7 @@
     "express-ws": "^5.0.2",
     "fetch": "^1.1.0",
     "fs": "^0.0.1-security",
+    "generic-pool": "^3.9.0",
     "node-fetch": "^2.6.9",
     "worker-threads": "^1.0.0",
     "ws": "^8.11.0"
