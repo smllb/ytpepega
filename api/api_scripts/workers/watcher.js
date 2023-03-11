@@ -2,7 +2,7 @@ const { Worker } = require('worker_threads');
 const { workerData, parentPort } = require('worker_threads'); 
 const { createPool } = require('generic-pool');
 const maxConcurrent = workerData.maxConcurrent;
-const ws = workerData.ws;
+
 
 const factory = {
     create: (data) => {
@@ -71,7 +71,6 @@ AcquireWorkerAndReportResult = (pool, data, callbackToProcessQueue) => {
 
   parentPort.on('message', data => {
     console.log(`Received ${data} from main thread | sending ${data.videoPath}`)
-    
     ProcessQueue(pool, data)
 
   })

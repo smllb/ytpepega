@@ -2,6 +2,8 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const { Worker, isMainThread } = require('worker_threads');
+const WebSocket = require('ws');
+
 
 
 
@@ -33,9 +35,10 @@ DownloadFromList = (list, watcher, ws) => {
 
         let videoData = {
             videoPath: videoPath,
-            audioOutput: audioOutput,
+            audioOutput: audioOutput, 
             filetype: filetype,
-            id: item.id
+            id: item.id,
+            
         }
         
         ytdlp.stdout.on('data', (data)=> {
@@ -50,7 +53,7 @@ DownloadFromList = (list, watcher, ws) => {
 
         ytdlp.on('close', (code) => {
 
-            console.log(`yt-dlp process exited with code ${code} | successful download of ${item.title} at ${videoPath}.mp4`);
+            //console.log(`yt-dlp process exited with code ${code} | successful download of ${item.title} at ${videoPath}.mp4`);
             
             //send info to client updating status to 'downloaded'
             SendCurrentStatus(`downloaded|${item.id}`, ws)
@@ -72,11 +75,13 @@ DownloadFromList = (list, watcher, ws) => {
 
 }
 
-BulkDownload = async (listJson, wss) => {
+BulkDownload = async (list, ws) => {
+
     console.log('bulkdownload is on, trynna do stuff')
-    //console.table(wss)
     const watcher = new Worker(`${__dirname}/workers/watcher.js`, { workerData: { maxConcurrent: maxConversionsAtTheSameTime } })
-    list = JSON.parse(listJson);
+
+    //ws.send('im inside your walls')
+    DownloadFromList(list, watcher, ws)
 
 };
 

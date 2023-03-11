@@ -22,26 +22,43 @@ isThereAnyApiKey = async () => {
     }
 }
 
+// connect to socket
+
 const socket = new WebSocket('ws://localhost:3000');
 
 socket.addEventListener('open', (event) => {
   console.log('WebSocket connection established');
-  socket.send('sup from client');
+  //socket.send('sup from client');
   
 });
 
+UpdateStatus = (command, id) => {
+
+statusItem = document.getElementById(`status-${id}`)
+statusItem.textContent =  command;
+
+}
+
 socket.addEventListener('message', (event) => {
   console.log('Message received from server:', event.data);
+  const [command, id] = event.data.split("|");
 
-  if(event.data == 'downloaded') {
-
-    // change color
-    
-  }
-  if(event.data == 'converted') {
-
-    // delete from list 
-
+  switch (command) {
+    case 'downloading':
+      UpdateStatus(command, id)
+      break;
+    case 'downloaded':
+      UpdateStatus(command, id)
+      break
+    case 'converting':
+      UpdateStatus(command, id)
+      break
+    case 'finished':
+      UpdateStatus(command, id)
+      break  
+    case 'download_error':
+      UpdateStatus('unavailable', id)
+      break
   }
 });
 
@@ -54,23 +71,12 @@ socket.addEventListener('error', (event) => {
 });
 
 
-SendVideoListToServer = (videoObj) => {
+SendVideoListToServer = (videoObj, socket) => {
 
+  
   selectedFiletype = document.getElementById('filetype').value;
-
   videoObj.filetype = selectedFiletype;
-
-  fetch('http://localhost:3000/send-list', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(videoObj)
-  }).then (response => {
-    console.log('Request successful');
-  })
-  .catch(error => {
-  console.log(`Request error: ${error}`);
-  });
+  socket.send(JSON.stringify({ videoObj, task: 'download' }))
 
 } 
+

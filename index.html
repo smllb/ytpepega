@@ -15,7 +15,7 @@
             </div>
             <div class="buttons-side">
                 <button type="button" class="button2" id="insertLink" onclick="AddToListAndUpdateResults()">insert link</button>
-                <button type="button" class="button" id="downloadList" onclick="SendVideoListToServer(videoList)">download list</button>
+                <button type="button" class="button" id="downloadList" onclick="SendVideoListToServer(videoList, socket)">download list</button>
             </div>
         </div>
         <div class="center gridmargin">
@@ -27,6 +27,11 @@
             <div class="description" id="description">
                 <ul id="descriptionList">
                     
+                </ul>
+            </div>
+            <div class="status" id="status">
+                <ul id="statusList">
+
                 </ul>
             </div>
         </div>

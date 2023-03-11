@@ -1,10 +1,18 @@
 const { workerData, parentPort } = require ('worker_threads')
 const { spawn } = require('child_process');
 const fs = require('fs');
+const WebSocket = require('ws');
+
+const socket = new WebSocket('ws://localhost:3000');
+
+socket.addEventListener('open', (event) => {
+  console.log('WebSocket connection established on worker');
+  //socket.send('sup from client');
+  
+});
 
 let count = 0;
 parentPort.addEventListener('message', async (event) => {
-
 
     if (event.data.task === 'convert') {
         count++
@@ -12,8 +20,8 @@ parentPort.addEventListener('message', async (event) => {
 
             videoPath: event.data.videoData.videoPath,
             audioOutput: event.data.videoData.audioOutput,
-            filetype: event.data.videoData.filetype
-    
+            filetype: event.data.videoData.filetype,
+            id: event.data.videoData.id
         }
 
         console.log('Worker received: ' + event.data.videoData.videoPath)
@@ -59,11 +67,13 @@ ConvertToAudioAndDeleteVideo = (coreVideoData) => {
             if (err) {
 
                 console.log('error encountered while deleting file. ' + err);
+                
             
             } else {
                 
                 console.log(`successfully deleted video at ${coreVideoData.videoPath}.mp4`);
-           
+
+                socket.send(JSON.stringify({task: 'finished', id: coreVideoData.id}));
             }
         });
 

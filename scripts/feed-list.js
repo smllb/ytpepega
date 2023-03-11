@@ -6,7 +6,7 @@ let videoList = {
 
 AddToListAndUpdateResults = async () => {
     PopulateList().then(() => {
-        socket.send('hasList');
+        socket.send(JSON.stringify({ task: 'hasList'}));
     })
 
 }

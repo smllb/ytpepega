@@ -1,5 +1,4 @@
 // build url stuff/query 
-
 PopulateList = async () => {
 
     url = urlElement.value;
@@ -50,7 +49,7 @@ PopulateList = async () => {
                   if (queryObject.nextPageToken) {
   
                       console.log(`\nPagetoken ${queryObject.nextPageToken} found. Playlist has more than 50 videos, iterating through all nextPageTokens to grab all available videos.`)
-                      //console.log(queryObject)
+                      
                       while (nextPageToken) {
                          console.log(`\nEntering with token ${nextPageToken}`)
                          const nextQueryObject = await QueryDataFromApi(baseURL, nextPageToken);
@@ -132,8 +131,7 @@ PopulateList = async () => {
                   id: (item.id) ? item.id : item.snippet.resourceId.videoId,
                   title: item.snippet.title.replace(reg, "")
               }))  
-              //console.log(items)
-              //console.log(`Inside QueryDataFromApi after generating const items. items be like \n ${items}`)
+
               console.log('checking for results' + data.pageInfo.totalResults)
               return {
   

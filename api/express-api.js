@@ -7,36 +7,16 @@ const WebSocket = require('ws');
 const BulkDownload  = require('./api_scripts/bulk-download.js')
 const apiKey = JSON.parse(fs.readFileSync('./user_settings/settings.json')).apiKey.toString();
 const VideoListPath = './temp_data/video_list.json';
-
 exp.use(cors());
 exp.use(bodyParser.json());
 
+const clients = new Map();
 
 exp.get('/key', (req, res) => {
   console.log("Retrieving apikey " + apiKey)
   res.json(apiKey);
   
 });
-
-ResetVideoList = () => {
-
-  let emptyObject = [];
-  fs.writeFile(VideoListPath, JSON.stringify(emptyObject), (err) => {
-
-    if (err) {
-
-      console.log('error while writing/wiping.');
-      return console.log(err);
-
-    }
-
-    console.log(`wiped file at ${VideoListPath}`);
-
-  });
-
-}
-
-
 
  UpdateHasListStatus = (value, context) => {
 
@@ -59,36 +39,41 @@ ResetVideoList = () => {
 
   
 const wss = new WebSocket.Server({ server: exp.listen(3000) });
+let browserClient;
 
 wss.on('connection', (ws) => {
-  console.table(ws)
 
-
-  wss.clients.forEach((client) => {
-    console.log(`trying to find clients`)
-    if (client.readyState === WebSocket.OPEN) {
-      console.log('found client' + client)
-    
-      
-    }
-    
-  })
+  if (!browserClient) {
+    browserClient = ws;
+  }
 
   console.log('WebSocket connection established at port 3000');
   UpdateHasListStatus(false, ws);
-  ResetVideoList();
+
   ws.on('message', (message) => {
     console.log(`Received message: ${message}`);
+    messageObj = JSON.parse(message);
+
+    // downloading - > downloaded -> converting -> converted+deleted
+    switch (messageObj.task) {
+      case 'converting':
+        browserClient.send(`converting|${messageObj.id}`)
+        break;
+      case 'finished':
+        console.log(`Video with id ${messageObj.id} finished.`)
+        browserClient.send(`finished|${messageObj.id}`)
+        break
+      case 'download':
+        console.log('download procedure received successfuly')
+        BulkDownload(messageObj.videoObj, ws);
+        break
+    }
 
     if (message == 'hasList') {
 
       UpdateHasListStatus(true, ws);
     }
-    if (message == 'download') {
 
-      ws.send('downloaded')
-
-    }
     
   });
   
@@ -104,13 +89,17 @@ wss.on('connection', (ws) => {
 
 exp.post('/send-list', (req, res) => {
 
-  console.log(`Retrieved video list from client.`)
-
+  console.log(`Sending video list from client to download.`)
   const jsonList = JSON.stringify(req.body);
-  BulkDownload(jsonList, wss);
+  console.table(client)
+  BulkDownload(jsonList, client);
   
-  res.send('video_list.json from received data');
 
 })
 
 module.exports = { exp, VideoListPath };
+
+// todo
+// update dom --> downloading>converting>delete from dom
+// create connection to websocket on the server side
+// client x socket and server-side(workers) x socket x client desu

@@ -92,8 +92,8 @@
 .center {
     grid-area: "center";
     display: grid;
-    grid-template-areas: "order" "description";                     
-    grid-template-columns: 5% 95%;
+    grid-template-areas: "order" "description status";                     
+    grid-template-columns: 5% 82% 13%;
     grid-template-rows: 100%;
     background-color: #151718;
     overflow-y: auto;
@@ -106,10 +106,21 @@
     grid-area: "order";
     display: flex;
     justify-content: center;
+    
 }
-
+.status {
+    grid-area: "status";
+    display: flex;
+    justify-content: center;
+}
+.status ul li{
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
 .order ul,
-.description ul {
+.description ul,
+.status ul {
     /* styles for the unordered lists */
     list-style: none;
     width: 100%;
@@ -118,7 +129,8 @@
 }
 
 .order ul li,
-.description ul li {
+.description ul li,
+.status ul li {
     /* styles for the list items */
     display: flex;
     width: (100%-10px);

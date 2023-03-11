@@ -29,8 +29,7 @@ AddLinkToList = (listObject, urlInfo) => {
     
     const orderList = document.getElementById(`orderList`);
     const descriptionList = document.getElementById(`descriptionList`);
-
-    //console.log(`check object on AddLinkToList \n${listObject.items[0].id}`)
+    const statusList = document.getElementById(`statusList`);
 
     if (!urlInfo.type) {
         return  console.log("No ID found on this URL.")
@@ -50,34 +49,39 @@ AddLinkToList = (listObject, urlInfo) => {
             LogMinorEvent(`Items added  successfuly to the list.`)
             
 
-            AddItemsToList(orderList, descriptionList, videoList)
+            AddItemsToList(orderList, descriptionList, videoList, statusList)
 
-            // AddItemsToList -> AddPropertiesToItems 
-
-
-            
         }
 
     });
     
 }
 
-AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList) => {
+AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList, statusItem) => {
 
-    const identificationList = ["order", "description"];
-    const itemsList = [orderItem, descriptionItem];
+    const identificationList = ["order", "description", "status"];
+    const itemsList = [orderItem, descriptionItem, statusItem];
     let actualIndex = videoList.items.length-1;
-    //console.log(`actualIndex: ${actualIndex}`)
-    //console.log(`videoList: ${videoList.items[actualIndex].id}`)
-    itemsList.forEach((element, i) => {
 
+    itemsList.forEach((element, i) => {
         let itemId = `${identificationList[i]}-${videoList.items[actualIndex].id}`;
         
         let descriptionContent =  `${videoList.items[actualIndex].title} ${videoList.items[actualIndex].id}`;
         let orderContent = actualIndex+1;
 
         element.setAttribute("id", itemId);
-        element.textContent = identificationList[i] == "order" ? orderContent : descriptionContent;
+        //element.textContent = identificationList[i] == "order" ? orderContent : descriptionContent;
+        switch(identificationList[i]) {
+            case "order":
+            element.textContent = orderContent;
+                break;
+            case "description":
+            element.textContent = descriptionContent;
+                break;
+            case "status":
+            element.textContent = 'pending'
+                break;
+        }
         element.classList.add(itemClass)
         element.classList.add("listItem")
         
@@ -85,16 +89,17 @@ AddPropertiesToItems = (orderItem, descriptionItem, itemClass, videoList) => {
 
 }
 
-AddItemsToList= (orderList, descriptionList, videoList) => {
+AddItemsToList= (orderList, descriptionList, videoList, statusList) => {
 
         let itemsClass = videoList.items.length%2===0 ? "brighter" : "darker";
         let orderItem = document.createElement("li");
         let descriptionItem = document.createElement("li");
+        let statusItem = document.createElement("li")
 
-        AddPropertiesToItems(orderItem, descriptionItem, itemsClass, videoList);
+        AddPropertiesToItems(orderItem, descriptionItem, itemsClass, videoList, statusItem);
         orderList.appendChild(orderItem);
         descriptionList.appendChild(descriptionItem);
-
+        statusList.appendChild(statusItem)
         //console.log(`videoList: ${videoList}`)
     
 }

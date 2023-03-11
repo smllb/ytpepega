@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const fs = require('fs');
-const api = require('./express-api.js');
+const api = require('./api/express-api.js');
 
 // Use the experiment module
 
