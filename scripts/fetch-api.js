@@ -53,9 +53,12 @@ socket.addEventListener('message', (event) => {
     case 'converting':
       UpdateStatus(command, id)
       break
+    case 'converted':
+      UpdateStatus(command, id)
+      break
     case 'finished':
       UpdateStatus(command, id)
-      break  
+      break
     case 'download_error':
       UpdateStatus('unavailable', id)
       break

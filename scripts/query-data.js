@@ -45,7 +45,8 @@ PopulateList = async () => {
               let nextPageToken = queryObject.nextPageToken;
              
               if (urlObject.type === "playlist") {
-  
+
+                console.log(`query : !!!!!!!!!1 ${urlObject}`);
                   if (queryObject.nextPageToken) {
   
                       console.log(`\nPagetoken ${queryObject.nextPageToken} found. Playlist has more than 50 videos, iterating through all nextPageTokens to grab all available videos.`)
@@ -53,6 +54,7 @@ PopulateList = async () => {
                       while (nextPageToken) {
                          console.log(`\nEntering with token ${nextPageToken}`)
                          const nextQueryObject = await QueryDataFromApi(baseURL, nextPageToken);
+                         console.log(`$query : !!!!!!!!!1 {nextQueryObject}`)
                          queryObject = {
                           ...queryObject,
                           items: [...queryObject.items, ...nextQueryObject.items],

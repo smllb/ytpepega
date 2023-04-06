@@ -37,3 +37,12 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+/* 
+
+Make usersettings read from file 
+Make alternative route without API key
+Download folder on click 
+Filetype actually doing something
+
+*/

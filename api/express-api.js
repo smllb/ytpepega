@@ -72,6 +72,7 @@ wss.on('connection', (ws) => {
     if (message == 'hasList') {
 
       UpdateHasListStatus(true, ws);
+   
     }
 
     

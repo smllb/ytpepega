@@ -3,13 +3,6 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const WebSocket = require('ws');
 
-const socket = new WebSocket('ws://localhost:3000');
-
-socket.addEventListener('open', (event) => {
-  console.log('WebSocket connection established on worker');
-  //socket.send('sup from client');
-  
-});
 
 let count = 0;
 parentPort.addEventListener('message', async (event) => {
@@ -36,46 +29,58 @@ parentPort.addEventListener('message', async (event) => {
 
 ConvertToAudioAndDeleteVideo = (coreVideoData) => {
 
-    console.log('Received object from worker listener')    
-    let filetype = coreVideoData.filetype
+    const socket = new WebSocket('ws://localhost:3000');
 
-    console.log(`Attempt to convert at ${coreVideoData.videoPath}.mp4 with output to ${coreVideoData.audioOutput}.mp3`);
-    let ffmpeg = spawn('ffmpeg', ['-y', '-i', `${coreVideoData.videoPath}.mp4`, '-b:a', '192K', '-vn', `${coreVideoData.audioOutput}.mp3`]);
-
-    ffmpeg.stdout.on('data', (data) => {
-
-        //console.log(`stdout: ${data}`);
-    });
-
-    ffmpeg.stderr.on('data', (data) => {
-
-        //console.error(`stderr: ${data}`);
-    });
-
-    ffmpeg.on('close', (code) => {
-
-        console.log(`ffmpeg process exited with code ${code}\n Deleting mp4 file at ${coreVideoData.videoPath}.mp4`);
+    socket.addEventListener('open', (event) => {
+        console.log('WebSocket connection established on worker');
+        //socket.send('sup from client');
+        let isSocketConnected = true;
         
-        if (code != 0) {
-            console.log(`code: ${code} | failure`);
-            
 
-        }
-        
-        fs.unlink(`${coreVideoData.videoPath}.mp4`, (err) => {
-
-            if (err) {
-
-                console.log('error encountered while deleting file. ' + err);
-                
-            
-            } else {
-                
-                console.log(`successfully deleted video at ${coreVideoData.videoPath}.mp4`);
-
-                socket.send(JSON.stringify({task: 'finished', id: coreVideoData.id}));
-            }
+        let filetype = coreVideoData.filetype
+        console.log('Received object from worker listener')    
+        console.log(`Attempt to convert at ${coreVideoData.videoPath}.mp4 with output to ${coreVideoData.audioOutput}.mp3`);
+        let ffmpeg = spawn('ffmpeg', ['-y', '-i', `${coreVideoData.videoPath}.mp4`, '-b:a', '192K', '-vn', `${coreVideoData.audioOutput}.mp3`]);
+        socket.send(JSON.stringify({task: 'converting', id: coreVideoData.id}));
+    
+        ffmpeg.stdout.on('data', (data) => {
+    
+            //console.log(`stdout: ${data}`);
         });
-
-    });
+    
+        ffmpeg.stderr.on('data', (data) => {
+    
+            //console.error(`stderr: ${data}`);
+        });
+    
+        ffmpeg.on('close', (code) => {
+    
+            console.log(`ffmpeg process exited with code ${code}\n Deleting mp4 file at ${coreVideoData.videoPath}.mp4`);
+            socket.send(JSON.stringify({task: 'converted', id: coreVideoData.id}));
+    
+            if (code != 0) {
+                console.log(`code: ${code} | failure`);
+                
+    
+            }
+            
+            fs.unlink(`${coreVideoData.videoPath}.mp4`, (err) => {
+    
+                if (err) {
+    
+                    console.log('error encountered while deleting file. ' + err);
+                    
+                
+                } else {
+                    
+                    console.log(`successfully deleted video at ${coreVideoData.videoPath}.mp4`);
+    
+                    socket.send(JSON.stringify({task: 'finished', id: coreVideoData.id}));
+                }
+            });
+    
+        });
+      });
+      
+    
 }
